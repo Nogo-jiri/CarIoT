@@ -1,16 +1,27 @@
 import RPi.GPIO as GPIO
-import picamera
+from picamera import PiCamera
+from twython import Twython
 import time
 import json
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(8,GPIO.IN,pull_up_down=GPIO.PUD_UP)
+GPIO.setup(32,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
 camera=PiCamera()
 
 with open('settings.json') as JsonFile:
     JsonData=json.load(JsonFile)
+    consumer_key=JsonData['consumer_key']
+    consumer_secret=JsonData['consumer_secret']
+    access_token=JsonData['access_token']
+    access_token_secret=JsonData['access_token_secret']
     MessageOfDoorAlarm=JsonData['MessageOfDoorAlarm']
     MessageOfDoorClosed=JsonData['MessageOfDoorClosed']
     MessageOfImpactAlarm=JsonData['MessageOfImpactAlarm']
     StandardTime=JsonData['StandardTime']
+
+twitter=Twython(consumer_key,consumer_secret,access_token,access_token_secret)
 
 def TwitMessage(message,image):
     if image==False:
@@ -35,7 +46,7 @@ while True:
             if t==StandardTime:
                 print("Door has been opened so long!")
                 TwitMessage(MessageOfDoorAlarm, False)
-    if GPIO.input(32)==0:
+    if GPIO.input(32)==1:
         camera.capture('CarImage.jpg')
         TwitMessage(MessageOfImpactAlarm, True)
         time.sleep(5)
