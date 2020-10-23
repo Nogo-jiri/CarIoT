@@ -1,0 +1,6 @@
+{
+	'MessageOfDoorAlarm' : "자동차의 문이 일정시간 열려있습니다! 확인해주세요.",
+	'MessageOfDoorClosed' : "자동차의 문이 다시 닫혔습니다!",
+	'MessageOfImpactAlarm' : "차량에 충격이 감지되었습니다! 도난이 의심되니 확인해주세요.",
+	'StandardTime' : 5
+}
